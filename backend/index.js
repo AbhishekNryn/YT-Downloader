@@ -59,6 +59,8 @@ app.post("/downloads", async (req, res) => {
 
 app.use("/downloads", express.static(downloadsDir));
 
-app.listen(3000, () => {
+const server = app.listen(3000, () => {
+  server.timeout = 6000;
   console.log("Server running on port 3000");
+  
 });
