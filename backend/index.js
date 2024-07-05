@@ -11,7 +11,6 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// Ensure downloads directory exists
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const downloadsDir = path.resolve(__dirname, "downloads");
@@ -60,7 +59,6 @@ app.post("/downloads", async (req, res) => {
 
 app.use("/downloads", express.static(downloadsDir));
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.listen(3000, () => {
+  console.log("Server running on port 3000");
 });

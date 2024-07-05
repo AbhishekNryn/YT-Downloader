@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Downloader</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>YouTube Downloader</h1>
+        <form id="download-form">
+            <input type="text" id="video-url" placeholder="Enter YouTube URL" required>
+            <button type="submit">Download</button>
+        </form>
+        <div id="result"></div>
+    </div>
+    <script>
+        document.getElementById("download-form").addEventListener("submit", async (event) => {
+            event.preventDefault(); // Prevent default form submission
+
+            const videoUrl = document.getElementById("video-url").value.trim();
+            if (!videoUrl) {
+                alert("Please enter a YouTube video URL");
+                return;
+            }
+
+            try {
+                const response = await fetch("http://localhost:3000/downloads", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ url: videoUrl }),
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to download video");
+                }
+
+                const result = await response.json();
+                console.log("Download response:", result);
+
+                const downloadLink = document.createElement("a");
+                downloadLink.href = result.downloadUrl;
+                downloadLink.textContent = "Download Video";
+                downloadLink.setAttribute("download", "");
+                downloadLink.style.display = "none"; 
+                document.body.appendChild(downloadLink);
+                downloadLink.click(); 
+
+                alert("Video download started"); 
+            } catch (error) {
+                console.error("Download failed:", error);
+                alert("Failed to download video. Please try again.");
+            }
+        });
+    </script>
+</body>
+</html>
